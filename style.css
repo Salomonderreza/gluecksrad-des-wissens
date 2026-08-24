@@ -1,0 +1,540 @@
+/* =====================================================================
+   Glücksrad des Wissens – Klasse 2
+   Gestaltung: dunkle "Showbühne", damit Rad und Frage auch bei Beamer-
+   projektion kontrastreich bleiben. Große Typografie, wenige Elemente.
+   ===================================================================== */
+
+:root {
+  --bg-deep:    #0E1330;
+  --bg-mid:     #1B2455;
+  --panel:      rgba(255, 255, 255, 0.07);
+  --panel-line: rgba(255, 255, 255, 0.16);
+
+  --ink:        #FFFFFF;
+  --ink-muted:  #AEB8E8;
+  --ink-dark:   #101638;
+
+  --gold:       #FFC53D;
+  --gold-deep:  #E39B0C;
+
+  --math:       #2E9BFF;
+  --german:     #35C46A;
+  --general:    #A56BFF;
+  --danger:     #FF7A7A;
+
+  --font-display: "Trebuchet MS", Candara, "Segoe UI", system-ui, sans-serif;
+  --font-body:    "Segoe UI", Verdana, system-ui, sans-serif;
+
+  --radius: 18px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--ink);
+  background:
+    radial-gradient(1100px 700px at 50% -10%, #2A3578 0%, transparent 60%),
+    linear-gradient(180deg, var(--bg-mid) 0%, var(--bg-deep) 70%);
+  background-attachment: fixed;
+  -webkit-text-size-adjust: 100%;
+}
+
+.stage {
+  min-height: 100%;
+  padding: clamp(12px, 2vw, 28px);
+}
+
+.screen {
+  max-width: 1180px;
+  margin: 0 auto;
+  min-height: calc(100vh - clamp(24px, 4vw, 56px));
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 2vh, 24px);
+}
+
+.screen--center {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+[hidden] { display: none !important; }
+
+/* ---------------------------------------------------------------- Typo */
+
+.eyebrow {
+  margin: 0;
+  font-size: clamp(0.8rem, 1.4vw, 1rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.6rem, 8vw, 5.6rem);
+  line-height: 0.95;
+  margin: 0.1em 0 0;
+  letter-spacing: -0.01em;
+}
+
+.title__sub { color: var(--gold); }
+
+.title__grade {
+  margin: 0.4em 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2.6vw, 1.7rem);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.lead {
+  margin: clamp(18px, 4vh, 40px) 0 0;
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  color: var(--ink);
+}
+
+/* ------------------------------------------------------------- Buttons */
+
+.btn {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--panel);
+  border: 2px solid var(--panel-line);
+  border-radius: var(--radius);
+  padding: 0.7em 1.3em;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn:hover { background: rgba(255, 255, 255, 0.14); }
+.btn:active { transform: translateY(2px); }
+
+.btn:focus-visible {
+  outline: 4px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.btn--huge {
+  font-size: clamp(1.3rem, 3.2vw, 2.2rem);
+  padding: 0.6em 1.6em;
+  border-radius: 22px;
+  letter-spacing: 0.02em;
+}
+
+.btn--gold {
+  background: linear-gradient(180deg, var(--gold) 0%, var(--gold-deep) 100%);
+  border-color: #FFDE8A;
+  color: var(--ink-dark);
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.35);
+}
+
+.btn--gold:hover { background: linear-gradient(180deg, #FFD467 0%, #F0A70F 100%); }
+.btn--gold:active { box-shadow: 0 3px 0 rgba(0, 0, 0, 0.35); }
+
+.btn--quiet {
+  background: none;
+  border-color: transparent;
+  color: var(--ink-muted);
+  font-size: clamp(0.9rem, 1.6vw, 1.05rem);
+  font-weight: 600;
+  padding: 0.5em 0.8em;
+}
+
+.btn--quiet:hover {
+  background: var(--panel);
+  color: var(--ink);
+}
+
+.btn--small { font-size: 1rem; padding: 0.55em 1em; }
+
+/* Der Drehen-Button steht neben einem sehr großen Rad und bleibt deshalb
+   bewusst zurückhaltend – groß genug für Whiteboard-Bedienung. */
+.btn--spin {
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  padding: 0.6em 2.2em;
+  border-radius: 16px;
+}
+
+.btn--danger {
+  background: rgba(255, 122, 122, 0.16);
+  border-color: var(--danger);
+  color: #FFD9D9;
+}
+
+.btn--danger:hover { background: rgba(255, 122, 122, 0.3); }
+
+.btn:disabled { opacity: 0.45; cursor: default; }
+.btn:disabled:hover { background: var(--panel); }
+
+.btn-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+/* ---------------------------------------------------------------- Rad */
+
+.wheel-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(8px, 1.4vh, 16px);
+}
+
+.wheel-holder {
+  position: relative;
+  width: min(66vh, 92vw, 860px);
+  aspect-ratio: 1 / 1;
+}
+
+.wheel {
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.5));
+}
+
+/* Die Drehung wird in app.js Bild für Bild gesetzt, damit die aufrechte
+   Beschriftung außerhalb des Rades exakt mitgeführt werden kann. */
+
+.wheel__rim {
+  fill: #0A0F28;
+  stroke: var(--gold-deep);
+  stroke-width: 10;
+}
+
+.wheel__hub {
+  fill: #0A0F28;
+  stroke: var(--gold);
+  stroke-width: 8;
+}
+
+.seg { stroke: #0A0F28; stroke-width: 5; }
+.seg--math    { fill: var(--math); }
+.seg--german  { fill: var(--german); }
+.seg--general { fill: var(--general); }
+
+/* Beschriftung: waagerecht in Großbuchstaben; die Schriftgröße wird in
+   app.js einmalig passend zum längsten Wort berechnet. */
+.wheel-label text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  fill: var(--ink-dark);
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.bulb { fill: #4A5490; }
+.bulb--on { fill: var(--gold); }
+
+/* Zeiger */
+.pointer {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 42px solid var(--gold);
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.6));
+  z-index: 2;
+}
+
+.wheel-result {
+  margin: 0;
+  min-height: 1.4em;
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2.2vw, 1.5rem);
+  font-weight: 700;
+  color: var(--ink-muted);
+}
+
+.wheel-result--math    { color: var(--math); }
+.wheel-result--german  { color: var(--german); }
+.wheel-result--general { color: var(--general); }
+
+/* ------------------------------------------------------------ Toolbar */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+.session-info {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.95rem;
+}
+
+/* -------------------------------------------------------------- Frage */
+
+.q-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1rem, 2.2vw, 1.5rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.4em 1em;
+  border-radius: 999px;
+  background: var(--panel);
+  border: 2px solid var(--panel-line);
+}
+
+.chip--math    { background: var(--math);    color: var(--ink-dark); border-color: #9CD0FF; }
+.chip--german  { background: var(--german);  color: var(--ink-dark); border-color: #A5E9C0; }
+.chip--general { background: var(--general); color: var(--ink-dark); border-color: #D6BEFF; }
+.chip--plain   { text-transform: none; letter-spacing: 0; }
+
+.q-counter {
+  color: var(--ink-muted);
+  font-size: clamp(0.95rem, 1.8vw, 1.2rem);
+  font-weight: 600;
+}
+
+.q-body,
+.a-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: clamp(10px, 2vh, 22px);
+  padding: clamp(10px, 3vh, 40px) 0;
+}
+
+.q-text {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 6.2vw, 5rem);
+  line-height: 1.12;
+  max-width: 20ch;
+}
+
+.hint {
+  margin: 0;
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.q-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 8px;
+  border-top: 2px solid var(--panel-line);
+}
+
+.q-foot__left {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ------------------------------------------------------------- Lösung */
+
+.a-question {
+  margin: 0;
+  font-size: clamp(1.1rem, 2.6vw, 1.9rem);
+  color: var(--ink-muted);
+  max-width: 28ch;
+}
+
+.a-label {
+  margin: 0;
+  font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.a-text {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.2rem, 7vw, 5.4rem);
+  line-height: 1.1;
+  max-width: 20ch;
+  color: var(--gold);
+  animation: pop 0.45s cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+
+.fun-flag {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 3.4vw, 2.4rem);
+  font-weight: 700;
+  color: var(--ink);
+}
+
+@keyframes pop {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ------------------------------------------------------- Leerer Pool */
+
+.empty-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 4.4vw, 3rem);
+  margin: 0.3em 0 0;
+  max-width: 22ch;
+}
+
+/* --------------------------------------------------------- Lehrkraft */
+
+.panels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+  padding-bottom: 20px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 2px solid var(--panel-line);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+}
+
+.panel__title {
+  font-family: var(--font-display);
+  margin: 0 0 12px;
+  font-size: 1.3rem;
+  color: var(--gold);
+}
+
+.panel__text { margin: 0 0 12px; line-height: 1.6; }
+
+.panel__note {
+  margin: 12px 0 0;
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+  line-height: 1.5;
+}
+
+.stand__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--panel-line);
+}
+
+.stand__row:last-child { border-bottom: none; }
+.stand__row span:last-child { white-space: nowrap; }
+.stand__row--sub { font-size: 0.9rem; color: var(--ink-muted); padding-left: 14px; }
+.stand__name { font-weight: 600; }
+
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  font-size: 1.05rem;
+  cursor: pointer;
+}
+
+.switch input {
+  width: 24px;
+  height: 24px;
+  accent-color: var(--gold);
+  cursor: pointer;
+}
+
+.reset-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+/* ----------------------------------------------------------- Dialog */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 9, 26, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 10;
+}
+
+.dialog {
+  background: var(--bg-mid);
+  border: 2px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 28px;
+  max-width: 520px;
+  text-align: center;
+}
+
+.dialog__text {
+  margin: 0 0 22px;
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+
+.dialog__row {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ------------------------------------------------------ Kleine Geräte */
+
+@media (max-width: 640px) {
+  .q-foot,
+  .q-foot__left { justify-content: center; width: 100%; }
+  .q-foot { flex-direction: column-reverse; align-items: stretch; }
+  .q-foot .btn--huge { width: 100%; }
+  .q-head { justify-content: center; }
+  .wheel-holder { width: min(96vw, 560px); }
+}
+
+/* ------------------------------------------------- Reduzierte Bewegung */
+
+@media (prefers-reduced-motion: reduce) {
+  /* Das Rad springt ohne Animation auf die Kategorie (siehe app.js). */
+  .a-text { animation: none; }
+  .btn { transition: none; }
+}

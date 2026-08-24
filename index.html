@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Glücksrad des Wissens – Klasse 2</title>
+  <meta name="description" content="Gemeinsames Klassenquiz für die 2. Klasse – für Beamer, Whiteboard und Tablet.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="stage">
+
+  <!-- =============================================================== -->
+  <!-- Startbildschirm                                                 -->
+  <!-- =============================================================== -->
+  <main id="screen-start" class="screen screen--center">
+    <p class="eyebrow">Klassenquiz</p>
+    <h1 class="title">Glücksrad<br><span class="title__sub">des Wissens</span></h1>
+    <p class="title__grade">Klasse 2</p>
+    <p class="lead">Bereit für die nächste Runde?</p>
+    <button id="btn-start" class="btn btn--huge">Spiel starten</button>
+    <button id="btn-open-teacher-start" class="btn btn--quiet">Lehrkraft-Einstellungen</button>
+  </main>
+
+  <!-- =============================================================== -->
+  <!-- Glücksrad                                                       -->
+  <!-- =============================================================== -->
+  <main id="screen-wheel" class="screen screen--center" hidden>
+
+    <div class="wheel-block">
+      <div class="wheel-holder">
+        <div class="pointer" aria-hidden="true"></div>
+
+        <svg id="wheel" class="wheel" viewBox="0 0 800 800" role="img"
+             aria-label="Glücksrad mit den Kategorien Mathe, Deutsch und Sachkunde">
+          <g id="wheel-rotor">
+            <circle cx="400" cy="400" r="364" class="wheel__rim"></circle>
+
+            <!-- Segment 1: Mathe (0°–120°) -->
+            <path class="seg seg--math" d="M400 400 L400 60 A340 340 0 0 1 694.4 570 Z"></path>
+            <!-- Segment 2: Deutsch (120°–240°) -->
+            <path class="seg seg--german" d="M400 400 L694.4 570 A340 340 0 0 1 105.6 570 Z"></path>
+            <!-- Segment 3: Sachkunde (240°–360°) -->
+            <path class="seg seg--general" d="M400 400 L105.6 570 A340 340 0 0 1 400 60 Z"></path>
+
+            <g id="bulbs" aria-hidden="true"></g>
+            <circle cx="400" cy="400" r="42" class="wheel__hub"></circle>
+          </g>
+
+          <!-- Beschriftung: Die Buchstaben stehen untereinander und bleiben
+               beim Drehen aufrecht. Sie liegen deshalb außerhalb der
+               rotierenden Gruppe und werden per JavaScript mitgeführt
+               (siehe app.js, Abschnitt 5). -->
+          <g id="wheel-labels" aria-hidden="true"></g>
+        </svg>
+      </div>
+
+      <p id="wheel-result" class="wheel-result" aria-live="polite">Drehe das Rad.</p>
+
+      <button id="btn-spin" class="btn btn--gold btn--spin">Drehen</button>
+    </div>
+
+    <div class="toolbar">
+      <button id="btn-open-teacher-wheel" class="btn btn--quiet">Lehrkraft-Einstellungen</button>
+      <p id="session-info-wheel" class="session-info"></p>
+    </div>
+  </main>
+
+  <!-- =============================================================== -->
+  <!-- Frage                                                           -->
+  <!-- =============================================================== -->
+  <main id="screen-question" class="screen" hidden>
+    <header class="q-head">
+      <span id="q-category" class="chip">Mathe</span>
+      <span id="q-counter" class="q-counter">Frage 1</span>
+    </header>
+
+    <div class="q-body" aria-live="polite">
+      <p id="q-open-hint" class="hint" hidden>Mehrere Antworten können richtig sein.</p>
+      <p id="q-text" class="q-text">Frage</p>
+    </div>
+
+    <footer class="q-foot">
+      <div class="q-foot__left">
+        <button id="btn-back-to-wheel-q" class="btn btn--quiet">Zurück zum Rad</button>
+        <button id="btn-skip" class="btn btn--quiet">Frage überspringen</button>
+      </div>
+      <button id="btn-answer" class="btn btn--huge btn--gold">Antwort</button>
+    </footer>
+  </main>
+
+  <!-- =============================================================== -->
+  <!-- Lösung                                                          -->
+  <!-- =============================================================== -->
+  <main id="screen-answer" class="screen" hidden>
+    <header class="q-head">
+      <span id="a-category" class="chip">Mathe</span>
+      <span id="a-counter" class="q-counter">Frage 1</span>
+    </header>
+
+    <div class="a-body" aria-live="polite">
+      <p id="a-question" class="a-question">Frage</p>
+      <p id="a-fun" class="fun-flag" hidden>Scherzfrage 😁</p>
+      <p id="a-open-hint" class="hint" hidden>Mehrere Antworten können richtig sein.</p>
+      <p class="a-label">Lösung</p>
+      <p id="a-text" class="a-text">Lösung</p>
+    </div>
+
+    <footer class="q-foot">
+      <div class="q-foot__left">
+        <button id="btn-back-to-question" class="btn btn--quiet">Zurück zur Frage</button>
+        <button id="btn-back-to-wheel-a" class="btn btn--quiet">Zurück zum Rad</button>
+      </div>
+      <button id="btn-next-round" class="btn btn--huge btn--gold">Nächste Runde</button>
+    </footer>
+  </main>
+
+  <!-- =============================================================== -->
+  <!-- Kategorie leer                                                  -->
+  <!-- =============================================================== -->
+  <main id="screen-empty" class="screen screen--center" hidden>
+    <p class="eyebrow">Fragenpool</p>
+    <h2 id="empty-text" class="empty-title">Alle Fragen wurden bereits gespielt.</h2>
+    <div class="btn-row">
+      <button id="btn-other-category" class="btn btn--huge">Andere Kategorie</button>
+      <button id="btn-reset-category" class="btn btn--huge btn--gold">Kategorie zurücksetzen</button>
+    </div>
+  </main>
+
+  <!-- =============================================================== -->
+  <!-- Lehrkraft-Menü                                                  -->
+  <!-- =============================================================== -->
+  <main id="screen-teacher" class="screen" hidden>
+    <header class="q-head">
+      <span class="chip chip--plain">Lehrkraft-Einstellungen</span>
+      <button id="btn-close-teacher" class="btn btn--small">Schließen</button>
+    </header>
+
+    <div class="panels">
+
+      <section class="panel">
+        <h2 class="panel__title">Fragenstand</h2>
+        <div id="stand-list" class="stand"></div>
+      </section>
+
+      <section class="panel">
+        <h2 class="panel__title">Aktuelle Sitzung</h2>
+        <p id="session-detail" class="panel__text"></p>
+        <button id="btn-new-session" class="btn btn--small">Neue Sitzung</button>
+        <p class="panel__note">Eine neue Sitzung setzt nur die Zählung von heute zurück. Gespielte Fragen bleiben gesperrt.</p>
+      </section>
+
+      <section class="panel">
+        <h2 class="panel__title">Einstellungen</h2>
+        <label class="switch">
+          <input type="checkbox" id="opt-sound">
+          <span>Ton an</span>
+        </label>
+      </section>
+
+      <section class="panel">
+        <h2 class="panel__title">Zurücksetzen</h2>
+        <div class="reset-row">
+          <button class="btn btn--small" data-reset="Mathematik">Nur Mathe</button>
+          <button class="btn btn--small" data-reset="Deutsch">Nur Deutsch</button>
+          <button class="btn btn--small" data-reset="Allgemeinwissen">Nur Sachkunde</button>
+        </div>
+        <button id="btn-reset-all" class="btn btn--danger">Fragenpool zurücksetzen</button>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- =============================================================== -->
+  <!-- Sicherheitsabfrage                                              -->
+  <!-- =============================================================== -->
+  <div id="confirm" class="overlay" hidden>
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="confirm-text">
+      <p id="confirm-text" class="dialog__text">Wirklich alle bisher verwendeten Fragen wieder freigeben?</p>
+      <div class="dialog__row">
+        <button id="btn-confirm-cancel" class="btn btn--small">Abbrechen</button>
+        <button id="btn-confirm-ok" class="btn btn--danger">Zurücksetzen</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="questions.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
