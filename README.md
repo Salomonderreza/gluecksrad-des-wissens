@@ -1,4 +1,4 @@
-# Glücksrad des Wissens – Klasse 2
+# Roulette des Wissens – Klasse 2
 
 Ein gemeinsames Klassenquiz für die ersten Schultage nach den Sommerferien.
 Die Lehrkraft dreht ein Glücksrad, alle Kinder sehen dieselbe Frage und
